@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+  <audio src="" id="audio"></audio>
+<div class="container">
+  <ul class="list-group">
+  </ul>
+</div>
+<script>
+    const surahContainer = document.querySelector('.list-group');
+    
+    
+    fetch(`https://api.quran.com/api/v4/chapters?language=en`)
+      .then(res => res.json())
+      .then(data => {
+        for (item of data.chapters) {
+          const surah = document.createElement('li');
+          surah.classList.add('list-group-item')
+          surah.innerHTML =item.id +'. '+ item.name_simple
+          surahContainer.appendChild(surah)
+        }
+         let allSura = document.querySelectorAll(".list-group li");
+            console.log(allSura.length)
+            allSura.forEach((sur, index) => {
+              sur.addEventListener('click', () => {
+                fetch(`https://api.quran.com/api/v4/chapter_recitations/3/${index+1}`)
+              .then(res => res.json())
+                 .then(data => {
+                   console.log(8)
+                   const audio = document.getElementById('audio')
+                   audio.pause();
+                   audio.src = "";
+                   audio.src = "";
+                   audio.src = data.audio_file.audio_url
+                   console.log(audio)
+                   // audio.pause()
+                   audio.play();
+                 })
+              })
+            })
+    })
+</script>
+</body>
+</html>
